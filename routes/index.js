@@ -19,7 +19,7 @@ router.post('/post',function(req,res){
     } else {
       console.log('Not connected');
     }
-    var collection= db.collection('testdb');
+    var collection= db.collection('newdb');
     var docs= [{name:name,rollno:rollno,math:math,sci:sci,eng:eng}];
     collection.insert(docs,{W:1},function(err,result){
       if(!err){console.log("data entered");}
@@ -37,7 +37,7 @@ router.get('/get',function(req,res){
     } else {
       console.log('Not connected');
     }
-    var collection= db.collection('testdb');
+    var collection= db.collection('newdb');
     collection.find().toArray(function(err,items){
       if(!err){
         console.log(items);
@@ -54,7 +54,7 @@ router.get('/get',function(req,res){
       } else {
         console.log('Not connected');
       }
-      var collection = db.collection('testdb');
+      var collection = db.collection('newdb');
       collection.remove({rollno:rno},{w:1},function(err,result){
         if(!err){
           console.log("data deleted");
@@ -65,4 +65,30 @@ router.get('/get',function(req,res){
     });
   });
 });
+router.post('/update',function(req,res){
+  var roll= req.param("roll");
+  var math1= req.param("math1");
+  var sci1= req.param("sci1");
+  var eng1= req.param("eng1");
+  console.log(roll+" "+ math1+" "+sci1+" "+eng1);
+  var MongoClient = require('mongodb').MongoClient;
+  MongoClient.connect("mongodb://localhost:27017/marksDb", function (err, db) {
+    if (!err) {
+      console.log("We are connected");
+    } else {
+      console.log('Not connected');
+    }
+    var collection = db.collection('newdb');
+    collection.update({rollno:roll},{$set:{math:math1,sci:sci1,eng:eng1}},function(err,result){
+      if(!err){
+        console.log("data updated");
+      }
+    });
+  res.send({status:'success'});
+
+  });
+});
+
+
+
 module.exports = router;
