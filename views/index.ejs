@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Student details</title>
+    <script src="/jquery-1.12.3.js"></script>
+
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <label>Name</label>
+  <input id="name">
+  <label>Roll no:</label>
+  <input id="rollno">
+  <label>Maths</label>
+  <input id="math">
+  <label>Science</label>
+  <input id="sci">
+  <label>English</label>
+  <input id="eng">
+  <button id="add">Add</button>
+  <button id="disp">Display all</button>
+  <input id="rno">
+  <button id="del">Delete</button>
+  <script>
+    jQuery(document).ready(function(){
+      $("#add").click(function(){
+        $.ajax({
+          type:'POST',
+          url:'/post',
+          data:{
+            name:$("#name").val(),
+            rollno:$("#rollno").val(),
+            math:$("#math").val(),
+            sci:$("#sci").val(),
+            eng:$("#eng").val()
+          },
+          success:function(data){
+            alert( "data added" );
+          },
+          error:function(data){
+            alert("error");
+          }
+        });
+      });
+      $("#disp").click(function(){
+        $.ajax({
+          type:'GET',
+          url:'/get',
+          data:{
+            name:$("name").val(),
+            rollno:$("#rollno").val(),
+            math:$("math").val(),
+            sci:$("#sci").val(),
+            eng:$("#eng").val()
+          },
+          success:function(data) {
+            for (i = 0; data[i]!= null; i++) {
+              alert("name : " + data[i].name + '\n'+
+                    "roll number : "+ data[i].rollno +'\n'+
+                      "maths marks : "+ data[i].math + '\n'+
+                      "science marks : "+ data[i].sci + '\n'+
+                      "english marks : "+ data[i].eng);
+              }
+          },
+            error:function(data){
+              alert("error");
+            }
+
+        });
+      });
+      $("#del").click(function(){
+        $.ajax({
+          type:'GET',
+          url:'/gets',
+          data:{
+            rno:$("#rno").val(),
+            },
+          success:function(data){
+            alert("Entry deleted");
+          }
+        });
+      });
+    });
+  </script>
+  </body>
+</html>
